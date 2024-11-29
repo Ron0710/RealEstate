@@ -16,12 +16,15 @@ const Footer = () => {
             window.location.reload();
         }
     }, []);
- const handleDownloadClick = () => {
-    const apkUrl = 'http://localhost:3000/apk/app-apk-674914f666570-1732842742.apk';
+  const handleDownloadClick = () => {
+    const apkUrl = '/apk/app-apk-674920b422397-1732845748.apk';
     const link = document.createElement('a');
     link.href = apkUrl;
-    link.click();
-};
+    link.download = 'Alveo.apk'; // Specify the desired file name
+    document.body.appendChild(link); // Append to DOM
+    link.click(); // Trigger download
+    document.body.removeChild(link); // Remove from DOM
+  };
 
     return (
         <>
