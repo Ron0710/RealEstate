@@ -253,13 +253,15 @@ const Map = () => {
       src={`${selectedLocation.location_image}`}
       alt={selectedLocation.name}
     />
-
-      <button
+<Link href={`/pages/buildings/${selectedLocation.id}`} passHref className="no-underline">
+  <button
         className="mt-2 p-2 bg-blue-500 text-white rounded"
         onClick={() => console.log(selectedLocation)} // Console log the selectedLocation.id
       >
         View Property Details
       </button>
+</Link>
+    
 
   </div>
 )}
