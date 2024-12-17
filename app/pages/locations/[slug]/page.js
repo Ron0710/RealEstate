@@ -161,15 +161,15 @@ export default function BlogPost({ params }) {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        console.log(slug);
-        const response = await fetch(`https://infinitech-testing1.online/api/blog/${slug}`);
+  
+        const response = await fetch(`http://localhost:8000/api/blog/${slug}`);
         if (!response.ok) {
           throw new Error("Failed to fetch blog post data");
         }
         const fetchedData = await response.json();
         setPropertyData(fetchedData);
       } catch (err) {
-        console.log(err);
+  
       }
     };
     fetchApi(); // Call the fetch function

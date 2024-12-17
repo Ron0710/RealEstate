@@ -26,7 +26,7 @@ const RootLayout = ({ children }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} overflow-x-hidden` }>
     
         {children}
       </body>

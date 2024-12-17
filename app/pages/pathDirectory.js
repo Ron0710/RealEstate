@@ -20,9 +20,6 @@ const Directory = ({ currentLocation, specificLocation }) => {
     } else if(currentLocation ==='LOCATION'){
         locationLink = '/location'
     } 
-   useEffect(() => {    
-        console.log("Current Location:", currentLocation);
-    }, [currentLocation]); // Runs every time currentLocation changes
 
     return (
         <>

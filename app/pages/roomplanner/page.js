@@ -36,7 +36,7 @@ const CanvasApp = () => {
   const initCanvas = () => {
     // If the canvas is already initialized, dispose of it
     if (canvasInstance) {
-      console.log("Canvas already initialized, disposing...");
+
       canvasInstance.dispose(); // Dispose of the current canvas to avoid duplication
     }
 
@@ -56,7 +56,7 @@ const CanvasApp = () => {
       height: window.innerHeight,
     });
 
-    console.log("New canvas initialized");
+ 
     return canvasInstance;
   };
 
@@ -81,7 +81,6 @@ const CanvasApp = () => {
     // Increment counter after creating the room
     setRoomIdCounter((prevCounter) => prevCounter + 1);
 
-    console.log("Room ID:", roomId);
     // Calculate initial room dimensions based on scaling factor in pixels
     const roomWidthPx = (width * 200) / scaling;
     const roomHeightPx = (height * 200) / scaling;
@@ -238,7 +237,7 @@ const CanvasApp = () => {
     });
 
     // Log all room items with their ID, width, and height
-    console.log("All rooms data:");
+
     rooms.forEach((room) => {
       const width = room.roomRect.width * room.roomRect.scaleX;
       const height = room.roomRect.height * room.roomRect.scaleY;
@@ -316,17 +315,12 @@ const CanvasApp = () => {
     });
 
     // Optional: Log the calculations for debugging
-    console.log(
-      `Width in pixels: ${roomWidth}, Height in pixels: ${roomHeight}`
-    );
-    console.log(
-      `Converted Width in meters: ${widthInMeters}, Height in meters: ${heightInMeters}`
-    );
+
   };
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/roomplanner");
+      const response = await fetch("http://localhost:8000/api/roomplanner");
       const data = await response.json();
       const grouped = data.data.reduce((acc, item) => {
         if (!acc[item.category]) {
@@ -462,26 +456,26 @@ const CanvasApp = () => {
 
         // Ensure labels exist and are part of the canvas before attempting to remove
         if (roomIdLabel) {
-          console.log("Removing roomIdLabel");
+  
           canvas.remove(roomIdLabel);
         }
         if (widthLabel) {
-          console.log("Removing widthLabel");
+      
           canvas.remove(widthLabel);
         }
         if (heightLabel) {
-          console.log("Removing heightLabel");
+      
           canvas.remove(heightLabel);
         }
 
         // Remove the room rectangle itself
-        console.log("Removing roomRect");
+  
         canvas.remove(activeObject);
 
         // Re-render the canvas to apply the changes
         canvas.renderAll();
       } else {
-        console.log("Selected object is not a room rectangle.");
+       
       }
     }
 
@@ -512,7 +506,6 @@ const CanvasApp = () => {
       category
     )}/${encodeURIComponent(picture)}`;
 
-    console.log("Image URL:", imageURL); // Log the URL for verification
 
     const altText = item.getAttribute("alt");
     const imgElement = new window.Image(); // Using window.Image to avoid Next.js conflict
@@ -529,24 +522,11 @@ const CanvasApp = () => {
       // Generate the item ID using the updated count
       const imageId = `${altText} item-${newCount}`;
 
-      console.log(
-        "Image ID:",
-        imageId,
-        "Image URL:",
-        imageURL,
-        "Category:",
-        category,
-        "Picture:",
-        picture,
-        "Item:",
-        item,
-        "Alt Text:",
-        altText
-      );
+  
 
       // Check if the image has already been added (either through ID check or canvas object check)
       if (loadedImageIds.has(imageId)) {
-        console.log("Image with this ID already exists. Skipping...");
+       
         return newCounters; // Prevent adding the image again
       }
 
@@ -555,7 +535,7 @@ const CanvasApp = () => {
         .getObjects("image")
         .find((img) => img.id === imageId);
       if (existingImage) {
-        console.log("Image already exists on canvas. Skipping...");
+      
         return newCounters; // Skip adding it again
       }
 
@@ -857,7 +837,7 @@ const CanvasApp = () => {
       // Save the PDF file
       doc.save("exported_data.pdf");
     } else {
-      console.log("No active objects on the canvas.");
+
     }
   };
 
@@ -887,7 +867,7 @@ const CanvasApp = () => {
     setShowPopup(false);
   };
   const handlePointerDown = (e) => {
-    console.log("Pointer touched the canvas");
+
     // Add your logic here
   };
 

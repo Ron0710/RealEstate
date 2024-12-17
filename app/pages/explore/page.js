@@ -50,13 +50,13 @@ function ExplorePage() {
 
   const fetchBuildings = async (value) => {
     try {
-      const endpoint = "https://infinitech-testing1.online/api/getbuildings";
+      const endpoint = "http://localhost:8000/api/getbuildings";
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data);
+
       let filteredData;
       if (value === "all") {
         filteredData = data; // Show all buildings
@@ -94,14 +94,13 @@ function ExplorePage() {
   const handleBuildingClick = async (buildingId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/property/id/${buildingId}`
+        `http://localhost:8000/api/property/id/${buildingId}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
       const propertyData = await response.json();
-      console.log("Fetched property data:", propertyData);
 
       // Redirect to the new URL using the property ID
       window.location.href = `http://localhost:3000/pages/buildings/${buildingId}`;

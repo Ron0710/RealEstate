@@ -114,9 +114,7 @@ useEffect(() => {
         }
     }, [isSidebarVisible]);
 
-const handleLocationClick = (key) => {
-        console.log(key);
-    };
+
     // Add scroll event listener to detect when user scrolls down
 
 

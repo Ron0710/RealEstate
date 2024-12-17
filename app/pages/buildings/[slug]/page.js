@@ -15,13 +15,13 @@ export default function BlogPost({ params }) {
     const fetchProperty = async () => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/property/id/${slug}`
+          `http://localhost:8000/api/property/id/${slug}`
         ); // Use the new endpoint for fetching by ID
         const data = await res.json();
 
         if (res.ok) {
           setProperty(data);
-          console.log(data);
+  
           await fetchFacilities(slug);
           await fetchBuildings(slug);
         } else {
@@ -37,13 +37,13 @@ export default function BlogPost({ params }) {
     const fetchFacilities = async (propertyId) => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/facilities/id/${propertyId}`
+          `http://localhost:8000/api/facilities/id/${propertyId}`
         ); // Fetch facilities
         const data = await res.json();
 
         if (res.ok) {
           setFacilities(data);
-          console.log(data);
+
         } else {
           console.error(data.message);
         }
@@ -55,13 +55,13 @@ export default function BlogPost({ params }) {
     const fetchBuildings = async (propertyId) => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/buildings/id/${propertyId}`
+          `http://localhost:8000/api/buildings/id/${propertyId}`
         ); // Fetch buildings
         const data = await res.json();
 
         if (res.ok) {
           setBuildings(data); // Ensure you're setting buildings, not facilities
-          console.log(data);
+
         } else {
           console.error(data.message);
         }
@@ -99,9 +99,9 @@ export default function BlogPost({ params }) {
         <div className="grid gap-4 lg:flex justify-center items-center text-center w-full 2xl:w-8/12 mx-auto">
           <img
             src={
-              property.path.startsWith("https://infinitech-testing1.online/storage/")
+              property.path.startsWith("http://localhost:8000/storage/")
                 ? property.path
-                : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+                : `http://localhost:8000/assets/Location/${encodeURIComponent(
                     property.path.replace("assets/Location/", "")
                   )}`
             }
@@ -110,9 +110,9 @@ export default function BlogPost({ params }) {
           />
           <img
             src={
-              property.view.startsWith("https://infinitech-testing1.online/storage/")
+              property.view.startsWith("http://localhost:8000/storage/")
                 ? property.view
-                : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+                : `http://localhost:8000/assets/Location/${encodeURIComponent(
                     property.view.replace("assets/Location/", "")
                   )}`
             }
@@ -157,9 +157,9 @@ export default function BlogPost({ params }) {
                   <h4>{feature.name}</h4>
                   <img
                     src={
-                      feature.image.startsWith("https://infinitech-testing1.online/storage/")
+                      feature.image.startsWith("http://localhost:8000/storage/")
                         ? feature.image
-                        : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+                        : `http://localhost:8000/assets/Location/${encodeURIComponent(
                             feature.image
                               .replace(/\\/g, "/")
                               .replace("assets/Location/", "")
@@ -205,9 +205,9 @@ export default function BlogPost({ params }) {
                 </h3>
                 <img
                   src={
-                    building.path.startsWith("https://infinitech-testing1.online/storage/")
+                    building.path.startsWith("http://localhost:8000/storage/")
                       ? building.path
-                      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+                      : `http://localhost:8000/assets/Location/${encodeURIComponent(
                           building.path.replace("assets/Location/", "")
                         )}`
                   }

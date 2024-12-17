@@ -57,19 +57,16 @@ export default function Admin({}) {
       return;
     }
 
-    // Log individual fields
-    console.log("User Data:", { email, password, code });
-
+ 
     // Prepare the data to send in the request body
     const data = {
       email,
       password,
       code,
     };
-    console.log(data);
-    // Perform the fetch request
+
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/register", {
+      const response = await fetch("http://localhost:8000/api/register", {
         method: "POST", // Use POST method to send data
         headers: {
           "Content-Type": "application/json", // Set content type to JSON
@@ -83,7 +80,6 @@ export default function Admin({}) {
         setAlertStatus("success");
         setShowAlert(true);
         const responseData = await response.json();
-        console.log("Registration successful:", responseData);
       } else {
         // If request fails
         const errorData = await response.json();
@@ -107,8 +103,6 @@ export default function Admin({}) {
       return;
     }
 
-    // Log individual fields (for debugging)
-    console.log("User Data:", { email, password, code });
 
     // Prepare the data to send in the request body
     const data = {
@@ -119,7 +113,7 @@ export default function Admin({}) {
 
     // Perform the fetch request
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/login", {
+      const response = await fetch("http://localhost:8000/api/login", {
         method: "POST", // Use POST method to send data
         headers: {
           "Content-Type": "application/json", // Set content type to JSON
@@ -130,7 +124,6 @@ export default function Admin({}) {
       if (response.ok) {
         // If request is successful
         const responseData = await response.json();
-        console.log("Login successful:", responseData);
 
         // Store the token in localStorage or sessionStorage
         localStorage.setItem("token", responseData.token);
@@ -312,7 +305,7 @@ export default function Admin({}) {
 
   const clearSelectedItems = () => {
     setSelectedItems([]);
-    console.log("Selected items cleared:", selectedItems); // Make sure this logs an empty array
+   
   };
 
   const renderFacilityInputs = (propertyId, inputs) =>
@@ -675,7 +668,7 @@ export default function Admin({}) {
       fetchGeolocation(value, propertyId, index); // Pass index to geolocation fetch
     }
 
-    console.log("Updated location inputs:", updatedInputs); // Log updated state
+  
   };
 
   const renderPropertyInputs = (index) => {
@@ -878,9 +871,7 @@ export default function Admin({}) {
     );
   };
   const handleUpdate = (propertyId, key, value, index) => {
-    console.log(
-      `Updating ${key} for property ${propertyId} with value: ${value}`
-    );
+  
     setSelectedItems((prevItems) =>
       prevItems.map((item) =>
         item.propertyId === propertyId
@@ -911,10 +902,6 @@ export default function Admin({}) {
       )
     );
   };
-  const getAllValues = () => {
-    console.log(locationInputs); // This will log all the inputted values
-    // You can return this object or use it as needed
-  };
 
   const handleFeatureUpdate = (propertyId, idx, value) => {
     setSelectedItems((prevItems) =>
@@ -936,20 +923,20 @@ export default function Admin({}) {
     setCurrentItem(null); // Clear the current item
   };
   const handleUpdateValues = () => {
-    console.log(selectedItems[0].viewType, selectedItems);
+ 
     let endpoint = "";
 
     // Define the endpoint based on the viewType
     if (selectedItems[0].viewType === "location") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-location";
+      endpoint = "http://localhost:8000/api/admin/update-location";
     } else if (selectedItems[0].viewType === "properties") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-properties";
+      endpoint = "http://localhost:8000/api/admin/update-properties";
     } else if (selectedItems[0].viewType === "buildings") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-buildings";
+      endpoint = "http://localhost:8000/api/admin/update-buildings";
     } else if (selectedItems[0].viewType === "features") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-features";
+      endpoint = "http://localhost:8000/api/admin/update-features";
     } else if (selectedItems[0].viewType === "facilities") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-facilities";
+      endpoint = "http://localhost:8000/api/admin/update-facilities";
     } else {
       console.error("Invalid viewType");
       return; // Exit if viewType is not recognized
@@ -958,10 +945,6 @@ export default function Admin({}) {
       propertyId: item.propertyId, // Get the propertyId for each item
       item: item.item, // Include the features for each property
     }));
-
-    console.log(dataToSend);
-
-    console.log(dataToSend);
     fetch(endpoint, {
       method: "POST",
       headers: {
@@ -978,7 +961,7 @@ export default function Admin({}) {
         return response.json();
       })
       .then((data) => {
-        console.log("Update successful:", data);
+      
         setPopupVisible(false); // Close the popup after successful update
         if (selectedItems[0].viewType === "location") {
           setAlertMessage("Successfully updating location!");
@@ -1035,9 +1018,6 @@ export default function Admin({}) {
       parsedItem = typeof item === "string" ? JSON.parse(item) : item; // Parse only for features
     }
 
-    // Log the inputs for debugging
-    console.log(propertyId, viewType, parsedItem, facilitiesData, featuresData);
-
     // Create a new entry with the correct item structure
     const newEntry = {
       propertyId,
@@ -1057,7 +1037,6 @@ export default function Admin({}) {
       if (itemIndex !== -1) {
         // If the item is already selected, remove it
         const updatedData = prevData.filter((_, index) => index !== itemIndex);
-        console.log("Updated Unique Items after uncheck:", updatedData); // Log the updated unique items after unchecking
         return updatedData; // Return the updated items without the unchecked item
       } else {
         // If the item is not selected, add it
@@ -1069,38 +1048,34 @@ export default function Admin({}) {
             index === self.findIndex((t) => t.propertyId === item.propertyId)
         );
 
-        console.log("Updated Unique Items after check:", uniqueData); // Log the updated unique items after checking
         return uniqueData; // Return the unique items
       }
     });
   };
 
   useEffect(() => {
-    console.log(viewType);
+
     // Remove duplicates based on propertyId and log unique items
     const uniqueItems = selectedItems.filter(
       (item, index, self) =>
         index === self.findIndex((t) => t.propertyId === item.propertyId)
     );
 
-    console.log("Unique Selected Items:", uniqueItems);
+
   }, [selectedItems]);
   const handleAdd = () => {
     if (
       (selectedItems.length > 0 && selectedItems[0].viewType === "location") ||
       (selectedItems.length === 0 && viewType === "location")
     ) {
-      console.log(true);
       setPopupVisible1(true); // Show the popup
     } else if (
       (selectedItems.length > 0 &&
         selectedItems[0].viewType === "properties") ||
       (selectedItems.length === 0 && viewType === "properties")
     ) {
-      console.log(true);
       setPopupVisible1(true); // Show the popup
     } else if (selectedItems.length === 0 && viewType === "buildings") {
-      console.log(true);
       setPopupVisible1(true); // Show the popup
     } else if (
       selectedItems.length > 0 &&
@@ -1108,7 +1083,6 @@ export default function Admin({}) {
     ) {
       setPopupVisible1(true); // Show the popup
     } else if (selectedItems.length === 0 && viewType === "features") {
-      console.log(true);
       setPopupVisible1(true); // Show the popup
     } else if (
       selectedItems.length > 0 &&
@@ -1116,7 +1090,6 @@ export default function Admin({}) {
     ) {
       setPopupVisible1(true); // Show the popup
     } else if (selectedItems.length === 0 && viewType === "facilities") {
-      console.log(true);
       setPopupVisible1(true); // Show the popup
     } else if (
       selectedItems.length > 0 &&
@@ -1129,14 +1102,10 @@ export default function Admin({}) {
       }));
 
       setAdditionalInputs(updatedInputs); // Set state with inputs for each property
-      console.log(selectedItems);
       setPopupVisible1(true); // Show the popup
     }
   };
   const handlePropertyIdChange = (oldPropertyId, newPropertyId) => {
-    console.log("Old Property ID:", oldPropertyId);
-    console.log("New Property ID:", newPropertyId);
-
     setFacilityInputs((prevInputs) =>
       prevInputs.map((input) =>
         input.propertyId === oldPropertyId
@@ -1152,7 +1121,6 @@ export default function Admin({}) {
       );
       return updatedInputs;
     });
-    console.log("Updated Facility Inputs:", facilityInputs); // Log updated inputs
   };
 
   const handleNumberOfFeaturesChange = (propertyId, e) => {
@@ -1280,13 +1248,8 @@ export default function Admin({}) {
     formData.append("propertyId", propertyId);
     formData.append("inputIndex", inputIndex);
 
-    // Log the contents of FormData
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/admin/upload", {
+      const response = await fetch("http://localhost:8000/api/admin/upload", {
         // Replace with your upload endpoint
         method: "POST",
         body: formData,
@@ -1297,7 +1260,7 @@ export default function Admin({}) {
       }
 
       const data = await response.json();
-      console.log("Image uploaded successfully", data);
+
       return data; // Return the response data for further processing
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -1305,9 +1268,7 @@ export default function Admin({}) {
     }
   };
 
-  useEffect(() => {
-    console.log("Current Property ID:", propertyId);
-  }, [propertyId]); // Log propertyId whenever it changes
+ // Log propertyId whenever it changes
   const createFormData = (buildingInputs) => {
     const formData = new FormData();
 
@@ -1383,10 +1344,10 @@ export default function Admin({}) {
       (selectedItems.length > 0 || selectedItems.length === 0) &&
       viewType === "location"
     ) {
-      console.log("aaa");
+   
       if (Array.isArray(locationInputs) && locationInputs.length > 0) {
         const formData = new FormData();
-        console.log(locationInputs);
+   
 
         // Append each location data field
         locationInputs.forEach((location, index) => {
@@ -1408,12 +1369,10 @@ export default function Admin({}) {
         });
 
         // Log the contents of formData
-        for (let pair of formData.entries()) {
-          console.log(pair[0] + ": " + pair[1]);
-        }
+
         try {
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/addlocation",
+            "http://localhost:8000/api/admin/addlocation",
             {
               method: "POST",
               body: formData,
@@ -1425,7 +1384,7 @@ export default function Admin({}) {
           }
 
           const data = await response.json();
-          console.log("Location data saved successfully:", data);
+
           fetchLocations();
           setPopupVisible1(false);
           setAlertMessage("Location saved successfully!");
@@ -1445,14 +1404,12 @@ export default function Admin({}) {
       (selectedItems.length > 0 || selectedItems.length === 0) &&
       viewType === "properties"
     ) {
-      console.log("aaa");
       if (Array.isArray(propertyInput) && propertyInput.length > 0) {
-        console.log("bbb");
         const formData = createFormDataProperty(propertyInput);
         try {
           // Make the API request to save the property
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/addproperty",
+            "http://localhost:8000/api/admin/addproperty",
             {
               method: "POST",
               body: formData,
@@ -1466,7 +1423,6 @@ export default function Admin({}) {
 
           // Parse the JSON data from the response
           const data = await response.json();
-          console.log("Property saved successfully:", data);
           fetchProperties();
           setPopupVisible1(false);
           setAlertMessage("Property saved Successfully!");
@@ -1486,11 +1442,9 @@ export default function Admin({}) {
       }
     } else if (selectedItems.length > 0 && viewType === "buildings") {
       const formData = createFormData(buildingInputs);
-      console.log("ddd");
-
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addbuildings",
+          "http://localhost:8000/api/admin/addbuildings",
           {
             method: "POST",
             body: formData,
@@ -1502,7 +1456,6 @@ export default function Admin({}) {
         }
 
         const data = await response.json();
-        console.log("Buildings saved successfully:", data);
         fetchBuildings();
         setPopupVisible1(false);
         setAlertMessage("Buildings saved successfully!");
@@ -1517,10 +1470,9 @@ export default function Admin({}) {
       }
     } else if (selectedItems.length === 0 && viewType === "buildings") {
       const formData = createFormData(buildingInputs);
-      console.log("aaaqq");
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addbuildings",
+          "http://localhost:8000/api/admin/addbuildings",
           {
             method: "POST",
             body: formData,
@@ -1532,7 +1484,6 @@ export default function Admin({}) {
         }
 
         const data = await response.json();
-        console.log("Buildings saved successfully:", data);
         fetchBuildings();
         setPopupVisible1(false);
         setAlertMessage("Buildings saved successfully!");
@@ -1564,18 +1515,11 @@ export default function Admin({}) {
         });
       });
 
-      // Log FormData entries
-      for (let [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          console.log(`${key}: ${value.name}`); // Log file name for better readability
-        } else {
-          console.log(`${key}: ${value}`); // Log other values directly
-        }
-      }
+
 
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addfeature",
+          "http://localhost:8000/api/admin/addfeature",
           {
             method: "POST",
             body: formData,
@@ -1587,7 +1531,7 @@ export default function Admin({}) {
         }
 
         const responseData = await response.json();
-        console.log("Success:", responseData);
+  
         fetchFeatures();
         setPopupVisible1(false);
         setAlertMessage("Feature added successfully!");
@@ -1628,12 +1572,10 @@ export default function Admin({}) {
       });
 
       // Debugging output
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value instanceof File ? value.name : value}`);
-      }
+
 
       // Send formData to the API
-      fetch("https://infinitech-testing1.online/api/admin/addfeature", {
+      fetch("http://localhost:8000/api/admin/addfeature", {
         method: "POST",
         body: formData,
       })
@@ -1642,7 +1584,7 @@ export default function Admin({}) {
           return response.json();
         })
         .then((responseData) => {
-          console.log("Success:", responseData);
+  
           fetchFeatures();
           setPopupVisible1(false);
           setAlertMessage("Feature Added Successfully!");
@@ -1657,7 +1599,7 @@ export default function Admin({}) {
       setShowAlert(true);
       fetchFeatures();
     } else if (selectedItems.length === 0 && viewType == "facilities") {
-      console.log(true);
+
       setPopupVisible1(true); // Show the pop up
       if (!propertyId) {
         console.error("Property ID is missing or invalid.");
@@ -1669,7 +1611,7 @@ export default function Admin({}) {
         facilities: facility, // Facility name or description
       }));
 
-      console.log(submittedFacilities);
+
 
       // Wrap the array in an object with the key 'facilities'
       const requestBody = { facilities: submittedFacilities };
@@ -1677,7 +1619,7 @@ export default function Admin({}) {
       // Make the API request
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addfacilitiesalone",
+          "http://localhost:8000/api/admin/addfacilitiesalone",
           {
             method: "POST",
             headers: {
@@ -1689,7 +1631,7 @@ export default function Admin({}) {
 
         if (response.ok) {
           const result = await response.json();
-          console.log("Success:", result);
+   
           fetchFacilities();
           // Handle success, e.g., notify the user or refresh the list
           fetchFacilities();
@@ -1726,11 +1668,10 @@ export default function Admin({}) {
           }));
       });
 
-      console.log("Submitted Facilities:", submittedData);
 
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/add-facilities",
+          "http://localhost:8000/api/admin/add-facilities",
           {
             method: "POST",
             headers: {
@@ -1742,9 +1683,6 @@ export default function Admin({}) {
 
         if (response.ok) {
           const result = await response.json();
-          console.log("Success:", result);
-          // Handle success, e.g., notify the user or refresh the list
-
           fetchFacilities();
           setPopupVisible1(false);
           setAlertMessage("Facilities Added Successfully!");
@@ -1772,7 +1710,7 @@ export default function Admin({}) {
   const fetchCount = async (endpoint, key) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/admin/${endpoint}`
+        `http://localhost:8000/api/admin/${endpoint}`
       );
       const data = await response.json();
       if (response.ok) {
@@ -1828,20 +1766,20 @@ export default function Admin({}) {
     }
     let url;
     if (viewType === "location") {
-      url = "https://infinitech-testing1.online/api/admin/deletelocation";
+      url = "http://localhost:8000/api/admin/deletelocation";
     } else if (viewType === "properties") {
-      url = "https://infinitech-testing1.online/api/admin/deleteproperty";
+      url = "http://localhost:8000/api/admin/deleteproperty";
     } else if (viewType === "buildings") {
-      url = "https://infinitech-testing1.online/api/admin/deletebuilding";
+      url = "http://localhost:8000/api/admin/deletebuilding";
     } else if (viewType === "features") {
-      url = "https://infinitech-testing1.online/api/admin/deletefeature";
+      url = "http://localhost:8000/api/admin/deletefeature";
     } else if (viewType === "facilities") {
-      url = "https://infinitech-testing1.online/api/admin/deletefacility";
+      url = "http://localhost:8000/api/admin/deletefacility";
     } else {
       console.error("Invalid viewType");
       return; // Exit if viewType is invalid
     }
-    console.log(idsToDelete);
+
     if (idsToDelete.length === 0) {
       console.error("No IDs selected for deletion.");
       return; // Exit if no IDs are selected
@@ -1860,11 +1798,7 @@ export default function Admin({}) {
         throw new Error(`Error deleting items: ${response.statusText}`);
       }
       setPopupVisible1(false);
-      console.log(
-        `${
-          viewType.charAt(0).toUpperCase() + viewType.slice(1)
-        } deleted successfully`
-      ); // Update this line
+
       clearSelectedItems();
       setAlertMessage("Deleted Successfully!");
       setAlertStatus("success");
@@ -1918,7 +1852,7 @@ export default function Admin({}) {
   };
   const fetchLocations = async () => {
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/locations");
+      const response = await fetch("http://localhost:8000/api/locations");
       const data = await response.json();
       setData(data); // Store fetched properties
       setViewType("location"); // Update state with fetched data
@@ -1930,7 +1864,7 @@ export default function Admin({}) {
     clearSelectedItems();
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/admin/properties"
+        "http://localhost:8000/api/admin/properties"
       ); // Fetch properties API
       const data = await response.json();
       setData(data); // Store fetched properties
@@ -1943,11 +1877,10 @@ export default function Admin({}) {
   const fetchBuildings = async () => {
     clearSelectedItems();
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/admin/buildings"); // Fetch buildings API
+      const response = await fetch("http://localhost:8000/api/admin/buildings"); // Fetch buildings API
       const data = await response.json();
       setData(data); // Store fetched buildings
       setViewType("buildings"); // Set view type to buildings
-      console.log(data);
     } catch (error) {
       console.error("Failed to fetch buildings:", error);
     }
@@ -1957,7 +1890,7 @@ export default function Admin({}) {
     clearSelectedItems();
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/admin/facilities"
+        "http://localhost:8000/api/admin/facilities"
       );
       const facilitiesData = await response.json();
 
@@ -1965,7 +1898,6 @@ export default function Admin({}) {
       const groupedFacilities = groupFacilitiesByProperty(facilitiesData);
       setData(groupedFacilities); // Set the grouped data
       setViewType("facilities"); // Set view type to facilities
-      console.log(groupedFacilities);
     } catch (error) {
       console.error("Failed to fetch facilities:", error);
     }
@@ -1973,11 +1905,11 @@ export default function Admin({}) {
   const fetchFeatures = async () => {
     clearSelectedItems();
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/admin/features"); // Fetch features API
+      const response = await fetch("http://localhost:8000/api/admin/features"); // Fetch features API
       const data = await response.json();
       setData(data); // Store fetched features
       setViewType("features"); // Set view type to features
-      console.log(data);
+
     } catch (error) {
       console.error("Failed to fetch features:", error);
     }
@@ -2019,11 +1951,11 @@ export default function Admin({}) {
     const fetchProperties = async () => {
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/properties"
+          "http://localhost:8000/api/admin/properties"
         ); // Your Next.js API route
         const data = await response.json();
         setProperties(data); // Store fetched properties
-        console.log(data);
+
       } catch (error) {
         console.error("Failed to fetch properties:", error);
       }
@@ -2041,10 +1973,10 @@ export default function Admin({}) {
 
     // Clear previous error messages
     setError("");
-    console.log(email, password, code);
+
     try {
       // Send the form data to the backend
-      const response = await fetch("https://infinitech-testing1.online/api/login", {
+      const response = await fetch("http://localhost:8000/api/login", {
         method: "POST", // Ensure that the method is POST, not GET
         headers: {
           "Content-Type": "application/json",
@@ -2060,12 +1992,12 @@ export default function Admin({}) {
         console.error("Login failed:", errorData.message);
       } else {
         const data = await response.json();
-        console.log("Login successful:", data);
+  
       }
 
       // If login is successful, handle the success (redirect or update UI)
       const data = await response.json();
-      console.log("Login successful:", data);
+
       // You can store the user data or token here if needed
       closePopup(); // Close the popup after successful login
     } catch (error) {
@@ -2622,10 +2554,7 @@ export default function Admin({}) {
                                   buildings: [],
                                 },
                               ]);
-                              console.log(
-                                "Updated Building Inputs with Property ID:",
-                                newPropertyId
-                              );
+                       
                             }
                           }}
                         />
@@ -2670,10 +2599,7 @@ export default function Admin({}) {
                               setFacilityInputs([
                                 { propertyId: newPropertyId, inputs: [] },
                               ]);
-                              console.log(
-                                "Updated Facility Inputs with Property ID:",
-                                newPropertyId
-                              );
+                      
                             }
                           }}
                         />

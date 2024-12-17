@@ -91,13 +91,13 @@ const Carousel = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch("https://infinitech-testing1.online/api/allproperty"); // Replace with your API endpoint
+        const response = await fetch("http://localhost:8000/api/allproperty"); // Replace with your API endpoint
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
         setLocations(data); // Assuming data is an array of location objects
-        console.log(data);
+  
       } catch (error) {
         console.error("Error fetching locations:", error);
       }
@@ -178,7 +178,7 @@ const Map = () => {
     // Fetch locations from the Laravel API
     const fetchLocations = async () => {
       try {
-        const response = await fetch("https://infinitech-testing1.online/api/locations");
+        const response = await fetch("http://localhost:8000/api/locations");
         const data = await response.json();
         setLocations(data); // Update state with fetched data
       } catch (error) {
@@ -256,7 +256,7 @@ const Map = () => {
 <Link href={`/pages/buildings/${selectedLocation.id}`} passHref className="no-underline">
   <button
         className="mt-2 p-2 bg-blue-500 text-white rounded"
-        onClick={() => console.log(selectedLocation)} // Console log the selectedLocation.id
+        // Console log the selectedLocation.id
       >
         View Property Details
       </button>
@@ -305,7 +305,7 @@ const ImageSlider = () => {
   // Function to fetch locations data from the backend
   const fetchLocations = async () => {
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/locations");
+      const response = await fetch("http://localhost:8000/api/locations");
       if (!response.ok) {
         throw new Error("Failed to fetch locations");
       }
@@ -401,7 +401,6 @@ const AlveoBanner = () => {
   // Image enlargement handler
   const handleImageClick = (imgPath) => {
     setEnlargedImage(imgPath); // Set the clicked image to enlarge
-    console.log(imgPath)  
   };
 
   // Close enlarged image
@@ -425,15 +424,12 @@ const AlveoBanner = () => {
     setSelectedValue(dropdownValue);
     setSearchInput(""); // Clear search input when dropdown changes
     setSuggestions([]); // Clear suggestions when dropdown changes
-    console.log("Selected Dropdown Filter:", dropdownValue);
     setShowSuggestions(false);
   };
 
   const handleSearchInputChange = (event) => {
     const searchValue = event.target.value;
     setSearchInput(searchValue);
-    console.log("Search Input:", selectedValue, searchValue);
-
     // Trigger fetch only if both dropdown and input have values
     if (selectedValue && searchValue) {
       fetchSuggestions(selectedValue, searchValue);
@@ -449,13 +445,10 @@ const AlveoBanner = () => {
     try {
       // Corrected URL to pass filter and search as query parameters
       const response = await fetch(
-        `https://infinitech-testing1.online/api/properties?filter=${filter}&search=${searchValue}`
+        `http://localhost:8000/api/properties?filter=${filter}&search=${searchValue}`
       );
 
       const data = await response.json();
-
-      // Log the fetched data to check the result
-      console.log("Fetched data:", data);
 
       const uniqueSuggestions = data.reduce((accumulator, currentItem) => {
         const currentValue = currentItem[filter];
@@ -465,7 +458,6 @@ const AlveoBanner = () => {
         return accumulator;
       }, []);
 
-      console.log("Fetched data:", uniqueSuggestions); // Debugging: Check if suggestions are filtered correctly
       setSuggestions(uniqueSuggestions); // Update suggestions state
       setShowSuggestions(true); // Show suggestions
     } catch (error) {
@@ -503,7 +495,7 @@ const AlveoBanner = () => {
   const fetchBuildingFeatures = async (propertyId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildingfeatures?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildingfeatures?property_id=${propertyId}`,
         {
           method: "GET",
           headers: {
@@ -517,7 +509,7 @@ const AlveoBanner = () => {
       }
 
       const features = await response.json();
-      console.log("Building features fetched:", features);
+
       return features;
     } catch (error) {
       console.error("Error fetching building features:", error);
@@ -527,7 +519,7 @@ const AlveoBanner = () => {
   const fetchBuildings = async (propertyId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildings?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildings?property_id=${propertyId}`,
         {
           method: "GET",
           headers: {
@@ -549,10 +541,10 @@ const AlveoBanner = () => {
   };
 
   const fetchData = async (filter, searchValue, callback) => {
-    console.log("Fetch Data value:", filter, searchValue);
+
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/properties?filter=${filter}&search=${searchValue}`,
+        `http://localhost:8000/api/properties?filter=${filter}&search=${searchValue}`,
         {
           method: "GET",
           headers: {
@@ -566,7 +558,6 @@ const AlveoBanner = () => {
       }
 
       const data = await response.json();
-      console.log("Properties fetched:", data);
 
       // Fetch buildings for each property
       const propertiesWithBuildings = await Promise.all(
@@ -578,7 +569,6 @@ const AlveoBanner = () => {
       );
 
       setFetchedData(propertiesWithBuildings); // Update state with properties and buildings
-      console.log("Properties with buildings:", propertiesWithBuildings);
 
       const uniqueSuggestions = [
         ...new Set(propertiesWithBuildings.map((item) => item[filter])),
@@ -609,15 +599,10 @@ const handleClick1 = () => {
     setShowSuggestions(false);
     openPopup();
     setLoading(true);
-    console.log("Fetching data...");
-
-    console.log("Selected Value:", selectedValue);
-    console.log("Search Input:", searchInput);
 
     if (selectedValue && searchInput) {
       // Fetch the property data based on selected value and search input
       fetchData(selectedValue, searchInput, async (properties) => {
-        console.log("Fetched Properties:", properties);
 
         if (properties.length > 0) {
           // Create an array to store properties with buildings
@@ -634,20 +619,15 @@ const handleClick1 = () => {
 
           // Store in state or pass to UI (depending on how you want to handle it)
           setFetchedData(propertiesWithBuildings);
-          console.log(
-            "Properties with associated buildings:",
-            propertiesWithBuildings
-          );
+
         } else {
-          console.log("No properties found.");
+        
         }
         setLoading(false);
         setShowSuggestions(false);
       });
     } else {
-      console.log(
-        "Both selectedValue and searchInput must have values to fetch data."
-      );
+  
     }
   };
 
@@ -739,7 +719,7 @@ const handleClick1 = () => {
               key={index}
               className="cursor-pointer hover:bg-gray-100 p-2 rounded max-h-40"
               onClick={() => {
-                console.log("Suggestion clicked:", item);
+          
                 setSearchInput(renderSuggestion(item));
                 setSuggestions([]);
                 setShowSuggestions(false);
@@ -881,16 +861,21 @@ const handleClick1 = () => {
                     </div>
 
                     {/* Image Gallery */}
-              {[property.path, property.view].map((imgPath, imgIndex) => {
-  console.log("Image Path:", property.path);  // Log imgPath before passing to handleImageClick
+   {[property.path, property.view].map((imgPath, imgIndex) => {
+  // Check if the image path is a relative path (local asset) or an absolute URL
+  const imageSrc =
+    imgPath.startsWith('http') || imgPath.startsWith('https')
+      ? imgPath // If it's a URL, use it directly
+      : `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`; // If it's a local asset, prepend the local server URL
+
   return (
     <div className="" key={imgIndex}>
       <img
-        src={imgPath}
+        src={imageSrc}
         alt={`${property.name} view ${imgIndex + 1}`}
-        onMouseEnter={() => setHoveredImage(imgPath)}
+        onMouseEnter={() => setHoveredImage(imageSrc)}
         onMouseLeave={() => setHoveredImage(null)}
-        onClick={() => handleImageClick(imgPath)}
+        onClick={() => handleImageClick(imageSrc)}
         className="w-full h-auto rounded-lg shadow-md group-hover:shadow-xl transform transition-all duration-300 ease-in-out hover:scale-105 object-cover"
       />
       {/* Hover overlay */}
@@ -898,6 +883,7 @@ const handleClick1 = () => {
     </div>
   );
 })}
+
 
 
                     {/* Property Info */}
@@ -961,36 +947,43 @@ const handleClick1 = () => {
                     </div>
 
                     {/* Key Features Section */}
-                    <div className="features-section space-y-8 flex flex-col items-center justify-center">
-                      <span className="section-title text-3xl font-extrabold text-gray-900 tracking-tight text-center">
-                        Key Features
-                      </span>
-                      <ul className="features-list space-y-8 flex flex-col items-center justify-center w-full max-w-4xl -ml-10">
-                        {JSON.parse(property.features).map(
-                          (feature, featureIndex) => (
-                            <li
-                              key={featureIndex}
-                              className="feature-item flex items-center gap-6 p-6 rounded-2xl bg-white shadow-xl transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gray-50 w-full max-w-md"
-                            >
-                              <img
-                                src={feature.image}
-                                alt={feature.name}
-                                className="feature-icon w-16 h-16 border-4 border-gray-300 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-125 hover:shadow-xl"
-                                onMouseEnter={() =>
-                                  setHoveredImage(feature.image)
-                                }
-                                onMouseLeave={() => setHoveredImage(null)}
-                                onClick={() => handleImageClick(feature.image)}
-                                style={{ cursor: "pointer" }}
-                              />
-                              <span className="text-xl font-semibold text-gray-800 tracking-tight">
-                                {feature.name}
-                              </span>
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
+               <div className="features-section space-y-8 flex flex-col items-center justify-center">
+  <span className="section-title text-3xl font-extrabold text-gray-900 tracking-tight text-center">
+    Key Features
+  </span>
+  <ul className="features-list space-y-8 flex flex-col items-center justify-center w-full max-w-4xl -ml-10">
+    {JSON.parse(property.features).map((feature, featureIndex) => {
+      // Ensure feature.image is not null or undefined before using it
+      const imageSrc =
+        feature.image && (feature.image.startsWith('http') || feature.image.startsWith('https'))
+          ? feature.image // If it's a URL, use it directly
+          : feature.image
+          ? `http://localhost:8000/${feature.image.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+          : ''; // If feature.image is null or undefined, fallback to an empty string or placeholder
+
+      return (
+        <li
+          key={featureIndex}
+          className="feature-item flex items-center gap-6 p-6 rounded-2xl bg-white shadow-xl transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gray-50 w-full max-w-md"
+        >
+          <img
+            src={imageSrc} // Use the dynamic image source here
+            alt={feature.name}
+            className="feature-icon w-16 h-16 border-4 border-gray-300 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-125 hover:shadow-xl"
+            onMouseEnter={() => setHoveredImage(imageSrc)}
+            onMouseLeave={() => setHoveredImage(null)}
+            onClick={() => handleImageClick(imageSrc)}
+            style={{ cursor: "pointer" }}
+          />
+          <span className="text-xl font-semibold text-gray-800 tracking-tight">
+            {feature.name}
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+</div>
+
 
                     {/* Building Features Section */}
                     <div className="">
@@ -1053,87 +1046,70 @@ const handleClick1 = () => {
 
 
                       {/* Building Layout Section */}
-                      {property.buildings && property.buildings.length > 0 && (
-                        <div className="mt-6 w-auto flex justify-center">
-                          <div className="w-auto max-w-4xl">
-                            {" "}
-                            {/* Container with max width */}
-                            <span className="section-title text-2xl font-bold text-gray-800 tracking-wide uppercase">
-                              Building Layout
-                            </span>
-                            <ul className="mt-3 flex -ml-9 flex-wrap w-80 gap-5">
-                              {" "}
-                              {/* Grid layout */}
-                              {property.buildings.map(
-                                (building, buildingIndex) => (
-                                  <li
-                                    key={buildingIndex}
-                                    className=" space-y-4 bg-white rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 p-4"
-                                  >
-                                    {/* Building Name */}
-                                    <h5 className="text-xl font-semibold text-gray-800">
-                                      {building.name}
-                                    </h5>
+                    {property.buildings && property.buildings.length > 0 && (
+  <div className="mt-6 w-auto flex justify-center">
+    <div className="w-auto max-w-4xl">
+      {/* Container with max width */}
+      <span className="section-title text-2xl font-bold text-gray-800 tracking-wide uppercase">
+        Building Layout
+      </span>
+      <ul className="mt-3 flex -ml-9 flex-wrap w-80 gap-5">
+        {/* Grid layout */}
+        {property.buildings.map((building, buildingIndex) => (
+          <li
+            key={buildingIndex}
+            className="space-y-4 bg-white rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 p-4"
+          >
+            {/* Building Name */}
+            <h5 className="text-xl font-semibold text-gray-800">
+              {building.name}
+            </h5>
 
-                                    {/* Image Container */}
-                                    <div className="relative">
-                                      <img
-                                        src={building.path}
-                                        alt={building.name}
-                                        onMouseEnter={() =>
-                                          setHoveredImage(building.path)
-                                        }
-                                        onMouseLeave={() =>
-                                          setHoveredImage(null)
-                                        }
-                                        onClick={() =>
-                                          handleImageClick(building.path)
-                                        }
-                                        className="w-full h-64 object-cover rounded-lg transition-all duration-300 transform hover:scale-105"
-                                      />
-                                      {/* Hover Effect: Show image details on hover */}
-                                    </div>
+            {/* Image Container */}
+            <div className="relative">
+              <img
+                src={
+                  building.path &&
+                  (building.path.startsWith('http') || building.path.startsWith('https'))
+                    ? building.path // If it's a URL, use it directly
+                    : building.path
+                    ? `http://localhost:8000/${building.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+                    : '' // Fallback in case building.path is null or undefined
+                }
+                alt={building.name}
+                onMouseEnter={() => setHoveredImage(building.path)}
+                onMouseLeave={() => setHoveredImage(null)}
+                onClick={() => handleImageClick(building.path)}
+                className="w-full h-64 object-cover rounded-lg transition-all duration-300 transform hover:scale-105"
+              />
+              {/* Hover Effect: Show image details on hover */}
+            </div>
 
-                                    {/* Building Info List */}
-                                    <ul className="mt-4 text-gray-700 space-y-2 list-none pl-0">
-                                      <li>
-                                        <strong className="text-gray-800">
-                                          Development Type:
-                                        </strong>{" "}
-                                        {building.development_type}
-                                      </li>
-                                      <li>
-                                        <strong className="text-gray-800">
-                                          Residential Levels:
-                                        </strong>{" "}
-                                        {building.residential_levels}
-                                      </li>
-                                      <li>
-                                        <strong className="text-gray-800">
-                                          Basement Parking Levels:
-                                        </strong>{" "}
-                                        {building.basement_parking_levels}
-                                      </li>
-                                      <li>
-                                        <strong className="text-gray-800">
-                                          Podium Parking Levels:
-                                        </strong>{" "}
-                                        {building.podium_parking_levels}
-                                      </li>
-                                      <li>
-                                        <strong className="text-gray-800">
-                                          Commercial Units:
-                                        </strong>{" "}
-                                        {building.commercial_units}
-                                      </li>
-                                    </ul>
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                          </div>
-                        </div>
-                      )}
+            {/* Building Info List */}
+            <ul className="mt-4 text-gray-700 space-y-2 list-none pl-0">
+              <li>
+                <strong className="text-gray-800">Development Type:</strong> {building.development_type}
+              </li>
+              <li>
+                <strong className="text-gray-800">Residential Levels:</strong> {building.residential_levels}
+              </li>
+              <li>
+                <strong className="text-gray-800">Basement Parking Levels:</strong> {building.basement_parking_levels}
+              </li>
+              <li>
+                <strong className="text-gray-800">Podium Parking Levels:</strong> {building.podium_parking_levels}
+              </li>
+              <li>
+                <strong className="text-gray-800">Commercial Units:</strong> {building.commercial_units}
+              </li>
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
+
                     </div>
                   </div>
                 ))
